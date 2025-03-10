@@ -1,4 +1,4 @@
-package com.bankSyestem.cards;
+package com.bankSystem.cards;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
