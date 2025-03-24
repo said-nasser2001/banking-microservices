@@ -1,11 +1,13 @@
 package com.bankSystem.accounts.controllers;
 
 import com.bankSystem.accounts.constants.AccountsConstants;
+import com.bankSystem.accounts.dto.AccountsContactInfoDto;
 import com.bankSystem.accounts.dto.CustomerDto;
 
 import com.bankSystem.accounts.dto.ErrorResponseDto;
 import com.bankSystem.accounts.dto.ResponseDto;
 import com.bankSystem.accounts.service.IAccountsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 
 @Tag(
         name = "CRUD REST APIs for Accounts",
@@ -34,8 +32,10 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Validated
 public class AccountsController {
-
+    @Autowired
     private IAccountsService iAccountsService;
+    @Autowired
+    private AccountsContactInfoDto accountsContactInfoDto;
 
     @Operation(
             summary = "Create Account REST API",
@@ -161,6 +161,26 @@ public class AccountsController {
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_DELETE));
         }
+    }
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accountsContactInfoDto);
     }
 
 
